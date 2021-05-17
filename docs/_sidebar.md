@@ -1,4 +1,4 @@
 * [Introduction](/)
 * [Installation and Deployment](install.md)
-* [Use](usage.md)
+* [Usage](usage.md)
 * [FAQ](faq.md)
