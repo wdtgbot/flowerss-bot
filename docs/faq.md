@@ -1,3 +1,5 @@
+
+
 ### There are a lot of prompts similar to `Create telegraph page error: FLOOD_WAIT_7` in the log.
 
 The reason is that the request to create the Telegraph page too quickly triggered the interface restriction. You can try to add multiple Telegraph tokens to the configuration file.
