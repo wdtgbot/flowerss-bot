@@ -2,9 +2,9 @@
 
 [![Build Status](https://github.com/indes/flowerss-bot/workflows/Release/badge.svg)](https://github.com/indes/flowerss-bot/actions?query=workflow %3ARelease)
 [![Test Status](https://github.com/indes/flowerss-bot/workflows/Test/badge.svg)](https://github.com/indes/flowerss-bot/actions?query=workflow %3ATest)
-![Build Docker Image](https://github.com/indes/flowerss-bot/workflows/Build%20Docker%20Image/badge.svg)
+[![Build Docker Image](https://github.com/indes/flowerss-bot/workflows/Build%20Docker%20Image/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/indes/flowerss-bot)](https://goreportcard.com/report/github.com/indes/flowerss-bot)
-![GitHub](https://img.shields.io/github/license/indes/flowerss-bot.svg)
+[![GitHub](https://img.shields.io/github/license/indes/flowerss-bot.svg)
 
 [Installation and Use Document](https://flowerss-bot.now.sh/)
 
@@ -12,16 +12,16 @@
 
 ## Features
 
--Common RSS Bot functions
--Support instant view in Telegram app
--Support for subscribing to RSS news for Group and Channel
--Rich subscription settings
+- Common RSS Bot functions
+- Support instant view in Telegram app
+- Support for subscribing to RSS news for Group and Channel
+- Rich subscription settings
 
 ## Installation and use
 
 For detailed installation and usage, please refer to the project [Usage Document](https://flowerss-bot.now.sh/).
 
-Use the command:
+List of available commands:
 
 ```
 /sub [url] Subscribe (url is optional)
