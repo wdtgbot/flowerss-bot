@@ -36,6 +36,7 @@ List of available commands:
 /import Import OPML files
 /export Export OPML file
 /unsuball cancel all subscriptions
-/help help
+/help Get detailed help
 ```
 For detailed usage, please refer to the project [usage document](https://orsixtyone.cf/flowerss-bot/#/usage).
+If needed, copy and paste the contents in [commands.txt](/commands.txt)
