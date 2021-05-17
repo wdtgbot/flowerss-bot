@@ -6,7 +6,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/indes/flowerss-bot)](https://goreportcard.com/report/github.com/indes/flowerss-bot)
 ![GitHub](https://img.shields.io/github/license/indes/flowerss-bot.svg)
 
-[Installation and Usage Document](https://orsixtyone.cf/flowerss-bot/)
+[Installation Process](https://orsixtyone.cf/flowerss-bot/)
 
 <img src="https://github.com/rssflow/img/raw/master/images/rssflow_demo.gif" width = "300"/>
 
@@ -19,7 +19,7 @@
 
 ## Installation and use
 
-For detailed installation and usage, please refer to the project [Usage Document](https://flowerss-bot.now.sh/).
+For detailed installation, please refer to the [installation process](https://orsixtyone.cf/flowerss-bot/#/).
 
 List of available commands:
 
@@ -38,4 +38,4 @@ List of available commands:
 /unsuball cancel all subscriptions
 /help help
 ```
-For detailed usage, please refer to the project [Usage Document](https://flowerss-bot.now.sh/#/usage).
+For detailed usage, please refer to the project [usage document](https://orsixtyone.cf/flowerss-bot/#/usage).
