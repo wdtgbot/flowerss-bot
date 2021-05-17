@@ -7,8 +7,8 @@ Download the corresponding version from the [Releases](https://github.com/indes/
 ## Docker deployment
 
 1. Download the configuration file
-Create a new `config.yml` file in the project directory
 
+Create a new `config.yml` file in the project directory
 
 ```bash
 mkdir ~/flowerss &&\
@@ -24,6 +24,7 @@ vim ~/flowerss/config.yml
 ```
 
 Modify the sqlite path in the configuration file (if sqlite is used as the database):
+
 ```yaml
 sqlite:
   path: /root/.flowerss/data.db
