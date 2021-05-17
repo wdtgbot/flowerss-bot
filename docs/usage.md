@@ -1,46 +1,46 @@
-## 使用
+## Usage
 
-命令：
-
-```
-/sub [url] 订阅（url 为可选）
-/unsub [url] 取消订阅（url 为可选）
-/list 查看当前订阅
-/set 设置订阅
-/check 检查当前订阅
-/setfeedtag [sub id] [tag1] [tag2] 设置订阅标签（最多设置三个Tag，以空格分隔）
-/setinterval [interval] [sub id] 设置订阅刷新频率（可设置多个sub id，以空格分隔）
-/activeall 开启所有订阅
-/pauseall 暂停所有订阅
-/import 导入 OPML 文件
-/export 导出 OPML 文件
-/unsuball 取消所有订阅
-/help 帮助
-```
-
-### Channel 订阅使用方法
-
-1. 将 Bot 添加为 Channel 管理员
-2. 发送相关命令给 Bot
-
-Channel 订阅支持的命令：
+command:
 
 ```
-/sub @ChannelID [url] 订阅
-/unsub @ChannelID [url] 取消订阅
-/list @ChannelID 查看当前订阅
-/check @ChannelID 检查当前订阅
-/unsuball @ChannelID 取消所有订阅
-/activeall @ChannelID 开启所有订阅
-/setfeedtag @ChannelID [sub id] [tag1] [tag2]  设置订阅标签（最多设置三个Tag，以空格分隔）
-/import 导入 OPML 文件
-/export @ChannelID 导出 OPML 文件
-/pauseall @ChannelID 暂停所有订阅
+/sub [url] Subscribe (url is optional)
+/unsub [url] Unsubscribe (url is optional)
+/list View current subscriptions
+/set Set subscription
+/check check current subscription
+/setfeedtag [sub id] [tag1] [tag2] Set the subscription tag (set up to three tags, separated by spaces)
+/setinterval [interval] [sub id] Set subscription refresh frequency (multiple sub ids can be set, separated by spaces)
+/activeall open all subscriptions
+/pauseall Pause all subscriptions
+/import Import OPML files
+/export Export OPML file
+/unsuball cancel all subscriptions
+/help help
 ```
 
-**ChannelID 只有设置为 Public Channel 才有。如果是 Private Channel，可以暂时设置为 Public，订阅完成后改为 Private，不影响 Bot 推送消息。**
+### Channel subscription usage
 
-例如要给 t.me/debug 频道订阅 [阮一峰的网络日志](http://www.ruanyifeng.com/blog/atom.xml) RSS 更新：
+1. Add Bot as Channel Administrator
+2. Send related commands to Bot
 
-1. 将 Bot 添加到 debug 频道管理员列表中
-2. 给 Bot 发送 `/sub @debug http://www.ruanyifeng.com/blog/atom.xml` 命令
+Commands supported by Channel subscription:
+
+```
+/sub @ChannelID [url] Subscribe
+/unsub @ChannelID [url] Unsubscribe
+/list @ChannelID View current subscription
+/check @ChannelID Check current subscription
+/unsuball @ChannelID Cancel all subscriptions
+/activeall @ChannelID open all subscriptions
+/setfeedtag @ChannelID [sub id] [tag1] [tag2] Set subscription tags (set up to three tags, separated by spaces)
+/import Import OPML files
+/export @ChannelID Export OPML file
+/pauseall @ChannelID Pause all subscriptions
+```
+
+**ChannelID is only available if it is set to Public Channel. If it is a Private Channel, you can temporarily set it to Public, and change it to Private after the subscription is completed, which does not affect Bot push messages. **
+
+For example, to subscribe to the t.me/debug channel [Ruan Yifeng's weblog](http://www.ruanyifeng.com/blog/atom.xml) RSS updates:
+
+1. Add Bot to the debug channel manager list
+2. Send the `/sub @debug http://www.ruanyifeng.com/blog/atom.xml` command to the Bot
