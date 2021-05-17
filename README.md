@@ -6,7 +6,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/indes/flowerss-bot)](https://goreportcard.com/report/github.com/indes/flowerss-bot)
 ![GitHub](https://img.shields.io/github/license/indes/flowerss-bot.svg)
 
-[Installation and Use Document](https://flowerss-bot.now.sh/)
+[Installation and Usage Document](https://orsixtyone.cf/flowerss-bot/)
 
 <img src="https://github.com/rssflow/img/raw/master/images/rssflow_demo.gif" width = "300"/>
 
