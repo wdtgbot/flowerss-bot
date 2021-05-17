@@ -81,7 +81,7 @@ Configuration instructions:
 | Configuration item        | Meaning                                                      | Required or not     |
 | --------------------------| ------------------------------------------------------------ | ------------------- | 
 | bot_token                 | Telegram Bot Token                                           | Required            |
-| telegraph_token           | Telegraph Token, used to transfer original text to Telegraph | Ignorable (do not transfer original text to Telegraph) see [this](https://stackoverflow.com/questions/62356634/how-to-get-access-token-of-telegrams-telegraph-account).|
+| telegraph_token           | Telegraph Token, used to transfer original text to Telegraph | Ignorable (do not transfer original text to Telegraph) see [this](https://stackoverflow.com/a/65789337).|
 | preview_text              | Plain text preview word count (without Telegraph)            | can be ignored (default 0, 0 is disabled) |
 | user_agent                | User Agent                                                   |           Ignorable |
 | disable_web_page_preview  | Whether to disable web page preview                          | Ignorable (default false, true to disable) |
