@@ -79,16 +79,31 @@ allowed_users:
 
 Configuration instructions:
 
-| Configuration item | Meaning | Required or not |
-| --------------------------| ---------------------- ------------------- | ------------------------------ ------------ |
-| bot_token | Telegram Bot Token | Required |
-| telegraph_token | Telegraph Token, used to transfer original text to Telegraph | Ignorable (do not transfer original text to Telegraph) |
-| preview_text | Plain text preview word count (without Telegraph) | can be ignored (default 0, 0 is disabled) |
-| user_agent | User Agent |Ignorable |
-| disable_web_page_preview | Whether to disable web page preview | Ignorable (default false, true to disable) |
-| update_interval | RSS feed scan interval (minutes) | Ignorable (default 10) |
-| error_threshold | Maximum number of source errors | Ignorable (default 100) |
-| socks5 | Used in environments where the Telegram API cannot work | Ignorable (Can connect to the Telegram API server normally) |
+| 配置项                     | 含义                                      | 是否必填                                       |
+| --------------------------| ----------------------------------------- | ------------------------------------------ |
+| bot_token                 | Telegram Bot Token                        | 必填                                       |
+| telegraph_token           | Telegraph Token, 用于转存原文到 Telegraph   | 可忽略（不转存原文到 Telegraph ）          |
+| preview_text              | 纯文字预览字数（不借助Telegraph）            |可忽略（默认0, 0为禁用）                    |
+| user_agent                | User Agent                                |可忽略                                     |
+| disable_web_page_preview  | 是否禁用 web 页面预览                       | 可忽略（默认 false, true 为禁用）          |
+| update_interval           | RSS 源扫描间隔（分钟）                      | 可忽略（默认 10）                          |
+| error_threshold           | 源最大出错次数                              |可忽略（默认 100）                          |
+| socks5                    | 用于无法正常 Telegram API 的环境            | 可忽略（能正常连接上 Telegram API 服务器） |
+| mysql                     | MySQL 数据库配置                           | 可忽略（使用 SQLite ）                     |
+| sqlite                    | SQLite 配置                               | 可忽略（已配置mysql时，该项失效）          |
+| telegram.endpoint         | 自定义telegram bot api url                | 可忽略（使用默认api url）          |
+| allowed_users             | 允许使用bot的用户telegram id，                        | 可忽略，为空时所有用户都能使用bot          |
+
+| Configuration item        | Meaning                                                      | Required or not     |
+| --------------------------| ------------------------------------------------------------ | ------------------- | 
+| bot_token                 | Telegram Bot Token                                           | Required            |
+| telegraph_token           | Telegraph Token, used to transfer original text to Telegraph | Ignorable (do not transfer original text to Telegraph) |
+| preview_text              | Plain text preview word count (without Telegraph)            | can be ignored (default 0, 0 is disabled) |
+| user_agent                | User Agent                                                   |           Ignorable |
+| disable_web_page_preview  | Whether to disable web page preview                          | Ignorable (default false, true to disable) |
+| update_interval           | RSS feed scan interval (minutes)                             | Ignorable (default 10) |
+| error_threshold           | Maximum number of source errors                              | Ignorable (default 100) |
+| socks5                    | Used in environments where the Telegram API cannot work      | Ignorable (Can connect to the Telegram API server normally) |
 | mysql | MySQL database configuration | Ignorable (using SQLite) |
 | sqlite | SQLite configuration | Ignorable (this item is invalid when mysql is configured) |
 | telegram.endpoint | Custom telegram bot api url | Ignorable (use the default api url) |
