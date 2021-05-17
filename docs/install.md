@@ -1,13 +1,13 @@
-# 部署
+# Deployment
 
-## 二进制部署
+## Binary deployment
 
-从 [Releases](https://github.com/indes/flowerss-bot/releases) 页面下载对应的版本解压运行即可。
+Download the corresponding version from the [Releases](https://github.com/indes/flowerss-bot/releases) page, unzip it and run it.
 
-## Docker 部署
+## Docker deployment
 
-1.下载配置文件
-在项目目录下新建 `config.yml` 文件
+1. Download the configuration file
+Create a new `config.yml` file in the project directory
 
 
 ```bash
@@ -17,25 +17,25 @@ wget -O ~/flowerss/config.yml \
 ```
 
 
-2.修改配置文件
+2. Modify the configuration file
 
 ```bash
 vim ~/flowerss/config.yml
 ```
 
-修改配置文件中sqlite路径（如果使用sqlite作为数据库）：
+Modify the sqlite path in the configuration file (if sqlite is used as the database):
 ```yaml
 sqlite:
   path: /root/.flowerss/data.db
 ```
 
-3.运行
+3. Run
 
 ```shell script
 docker run -d -v ~/flowerss:/root/.flowerss indes/flowerss-bot
 ```
 
-## 源码编译部署
+## Source code compilation and deployment
 
 ```shell script
 git clone https://github.com/indes/flowerss-bot && cd flowerss-bot
@@ -45,16 +45,16 @@ make build
 
 
 
-## 配置
+## Configuration
 
-根据以下模板，新建 `config.yml` 文件。
+Create a new `config.yml` file based on the following template.
 
 ```yml
 bot_token: XXX
-#多个telegraph_token可采用数组格式：
+#Multiple telegraph_token can be in array format:
 # telegraph_token:
-#  - token_1
-#  - token_2
+#-token_1
+#-token_2
 telegraph_token: xxxx
 user_agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
 preview_text: 0
@@ -73,23 +73,23 @@ mysql:
 sqlite:
   path: ./data.db
 allowed_users:
-  - 123
-  - 234
+  -123
+  -234
 ```
 
-配置说明：
+Configuration instructions:
 
-| 配置项                     | 含义                                      | 是否必填                                       |
-| --------------------------| ----------------------------------------- | ------------------------------------------ |
-| bot_token                 | Telegram Bot Token                        | 必填                                       |
-| telegraph_token           | Telegraph Token, 用于转存原文到 Telegraph   | 可忽略（不转存原文到 Telegraph ）          |
-| preview_text              | 纯文字预览字数（不借助Telegraph）            |可忽略（默认0, 0为禁用）                    |
-| user_agent                | User Agent                                |可忽略                                     |
-| disable_web_page_preview  | 是否禁用 web 页面预览                       | 可忽略（默认 false, true 为禁用）          |
-| update_interval           | RSS 源扫描间隔（分钟）                      | 可忽略（默认 10）                          |
-| error_threshold           | 源最大出错次数                              |可忽略（默认 100）                          |
-| socks5                    | 用于无法正常 Telegram API 的环境            | 可忽略（能正常连接上 Telegram API 服务器） |
-| mysql                     | MySQL 数据库配置                           | 可忽略（使用 SQLite ）                     |
-| sqlite                    | SQLite 配置                               | 可忽略（已配置mysql时，该项失效）          |
-| telegram.endpoint         | 自定义telegram bot api url                | 可忽略（使用默认api url）          |
-| allowed_users             | 允许使用bot的用户telegram id，                        | 可忽略，为空时所有用户都能使用bot          |
+| Configuration item | Meaning | Required or not |
+| --------------------------| ---------------------- ------------------- | ------------------------------ ------------ |
+| bot_token | Telegram Bot Token | Required |
+| telegraph_token | Telegraph Token, used to transfer original text to Telegraph | Ignorable (do not transfer original text to Telegraph) |
+| preview_text | Plain text preview word count (without Telegraph) | can be ignored (default 0, 0 is disabled) |
+| user_agent | User Agent |Ignorable |
+| disable_web_page_preview | Whether to disable web page preview | Ignorable (default false, true to disable) |
+| update_interval | RSS feed scan interval (minutes) | Ignorable (default 10) |
+| error_threshold | Maximum number of source errors | Ignorable (default 100) |
+| socks5 | Used in environments where the Telegram API cannot work | Ignorable (Can connect to the Telegram API server normally) |
+| mysql | MySQL database configuration | Ignorable (using SQLite) |
+| sqlite | SQLite configuration | Ignorable (this item is invalid when mysql is configured) |
+| telegram.endpoint | Custom telegram bot api url | Ignorable (use the default api url) |
+| allowed_users | Telegram id of users allowed to use bot, | can be ignored, all users can use bot when it is empty |
