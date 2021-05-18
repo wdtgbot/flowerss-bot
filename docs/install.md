@@ -2,7 +2,7 @@
 
 ## Binary deployment
 
-Download the corresponding version from the [Releases](https://github.com/indes/flowerss-bot/releases) page, unzip it and run it.
+Download the corresponding version from the [Releases](https://github.com/reaitten/flowerss-bot/releases) page, unzip it and run it.
 
 ## Docker deployment
 
