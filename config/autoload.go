@@ -182,8 +182,8 @@ func (t TplData) replaceHTMLTags(s string) string {
 func validateTPL() {
 	testData := []TplData{
 		TplData{
-			"RSS 源标识 - 无预览无telegraph的消息",
-			"这是标题",
+			"RSS Feed ID-No preview, no telegraph message",
+			"This is the title",
 			"https://www.github.com/",
 			"",
 			"",
@@ -191,21 +191,21 @@ func validateTPL() {
 			false,
 		},
 		TplData{
-			"RSS源标识 - 有预览无telegraph的消息",
-			"这是标题",
+			"RSS source identification - messages with preview without telegraph",
+			"This is the title",
 			"https://www.github.com/",
-			"这里是很长很长很长的消息预览字数补丁紫薯补丁紫薯补丁紫薯补丁紫薯补丁[1](123)",
+			"Here is a very long very long message preview word count patch purple sweet potato patch purple sweet potato patch purple sweet potato patch[1](123)",
 			"",
-			"#标签",
+			"#label",
 			false,
 		},
 		TplData{
-			"RSS源标识 - 有预览有telegraph的消息",
+			"RSS source ID-messages with telegraph preview",
 			"这是标题",
 			"https://www.github.com/",
-			"这里是很长很长很长的消息预览字数补丁紫薯补丁紫薯补丁紫薯补丁紫薯补丁",
+			"Here is a very long very long message preview word count patch purple sweet potato patch purple sweet potato patch purple sweet potato patch",
 			"https://telegra.ph/markdown-07-07",
-			"#标签1 #标签2",
+			"#Label 1 #Label 2",
 			true,
 		},
 	}
