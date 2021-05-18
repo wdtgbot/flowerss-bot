@@ -3,8 +3,8 @@ package tgraph
 import (
 	"go.uber.org/zap"
 
-	"github.com/indes/flowerss-bot/config"
-	"github.com/indes/telegraph-go"
+	"github.com/reaitten/flowerss-bot/config"
+	"github.com/reaitten/telegraph-go"
 )
 
 const (
