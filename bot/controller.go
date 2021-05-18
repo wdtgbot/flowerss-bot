@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/indes/flowerss-bot/bot/fsm"
-	"github.com/indes/flowerss-bot/config"
-	"github.com/indes/flowerss-bot/model"
+	"github.com/reaitten/flowerss-bot/bot/fsm"
+	"github.com/reaitten/flowerss-bot/config"
+	"github.com/reaitten/flowerss-bot/model"
 
 	tb "gopkg.in/tucnak/telebot.v2"
 )
@@ -22,11 +22,11 @@ Subscription<b>Setup</b>
 [id] {{ .sub.ID }}
 [title] {{ .source.Title }}
 [Link] {{.source.Link }}
-[Fetch updates] {{if ge .source.ErrorCount .Count }}暂停{{else if lt .source.ErrorCount .Count }}抓取中{{end}}
-[Crawl frequency] {{ .sub.Interval }}分钟
-[Notification] {{if eq .sub.EnableNotification 0}}关闭{{else if eq .sub.EnableNotification 1}}开启{{end}}
-[Telegraph] {{if eq .sub.EnableTelegraph 0}}关闭{{else if eq .sub.EnableTelegraph 1}}开启{{end}}
-[Tag] {{if .sub.Tag}}{{ .sub.Tag }}{{else}}无{{end}}
+[Fetch updates] {{if ge .source.ErrorCount .Count }}time out{{else if lt .source.ErrorCount .Count }}Crawling{{end}}
+[Crawl frequency] {{ .sub.Interval }}minute
+[Notification] {{if eq .sub.EnableNotification 0}}关闭{{else if eq .sub.EnableNotification 1}}Turn on{{end}}
+[Telegraph] {{if eq .sub.EnableTelegraph 0}}shut down{{else if eq .sub.EnableTelegraph 1}}Turn on{{end}}
+[Tag] {{if .sub.Tag}}{{ .sub.Tag }}{{else}}no{{end}}
 `
 )
 
