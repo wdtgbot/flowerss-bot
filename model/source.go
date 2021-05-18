@@ -11,8 +11,8 @@ import (
 	"unicode"
 
 	"github.com/SlyMarbo/rss"
-	"github.com/indes/flowerss-bot/config"
-	"github.com/indes/flowerss-bot/util"
+	"github.com/reaitten/flowerss-bot/config"
+	"github.com/reaitten/flowerss-bot/util"
 	"github.com/jinzhu/gorm"
 )
 

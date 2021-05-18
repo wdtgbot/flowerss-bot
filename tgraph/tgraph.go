@@ -4,7 +4,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/reaitten/flowerss-bot/config"
-	"github.com/reaitten/telegraph-go"
+	"github.com/indes/telegraph-go"
 )
 
 const (

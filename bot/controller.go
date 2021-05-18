@@ -3,11 +3,12 @@ package bot
 import (
 	"bytes"
 	"fmt"
-	"go.uber.org/zap"
 	"html/template"
 	"strconv"
 	"strings"
 	"time"
+
+	"go.uber.org/zap"
 
 	"github.com/reaitten/flowerss-bot/bot/fsm"
 	"github.com/reaitten/flowerss-bot/config"
@@ -409,7 +410,7 @@ func setFeedItemBtnCtr(c *tb.Callback) {
 	data := strings.Split(c.Data, ":")
 	subscriberID, _ := strconv.Atoi(data[0])
 
-	// If the subscriber id is different from the button clicker id, you need to verify the administrator authority 
+	// If the subscriber id is different from the button clicker id, you need to verify the administrator authority
 
 	if subscriberID != c.Sender.ID {
 		channelChat, err := B.ChatByID(fmt.Sprintf("%d", subscriberID))
@@ -1176,7 +1177,7 @@ func docCtr(m *tb.Message) {
 	if err != nil {
 		if err.Error() == "fetch opml file error" {
 			_, _ = B.Send(m.Chat,
-				"Failed to download the OPML file. Please check whether the bot server can connect to the Telegram server normally or try to import it later. Error code 02)
+				"Failed to download the OPML file. Please check whether the bot server can connect to the Telegram server normally or try to import it later. Error code 02")
 
 		} else {
 			_, _ = B.Send(
