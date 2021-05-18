@@ -39,5 +39,3 @@ List of available commands:
 /help Get detailed help
 ```
 For detailed usage, please refer to the project [usage document](https://orsixtyone.cf/flowerss-bot/#/usage).
-
-If needed, copy and paste the contents in [commands.txt](/commands.txt) into [@BotFather](https://t.me/BotFather)
