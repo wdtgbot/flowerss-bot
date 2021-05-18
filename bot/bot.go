@@ -71,22 +71,22 @@ func setCommands() {
 		{"start", "Get started"},
 		{"sub", "Subscribe to RSS feed"},
 		{"list", "RSS feeds currently subscribed"},
-		{"unsub", "Unsubscribe rss feed"},
-		{"unsuball", "Unsubscribe from all rss sources"},
+		{"unsub", "Unsubscribe RSS feed"},
+		{"unsuball", "Unsubscribe from all RSS sources"},
 
-		{"set", "Set up rss subscription"},
-		{"setfeedtag", "Set rss subscription label"},
+		{"set", "Set up RSS subscription"},
+		{"setfeedtag", "Set RSS subscription label"},
 		{"setinterval", "Set RSS subscription crawl interval"},
 
 		{"export", "Export subscription as OPML file"},
-			{"import", "Import subscription from opml file"},
+			{"import", "Import subscription from OPML file"},
 
-		{"check", "Check the status of my rss subscription"},
-		{"pauseall", "Stop crawling subscription updates"},
+		{"check", "Check the status of my RSS subscription"},
+		{"pauseall", "Pause all crawling subscription updates"},
 		{"activeall", "Turn on fetching subscription updates"},
 
-		{"help", "Using help"},
-		{"version", "bot version"},
+		{"help", "Get a list of available commands"},
+		{"version", "Bot Version"},
 	}
 
 	zap.S().Debugf("set bot command %+v", commands)
