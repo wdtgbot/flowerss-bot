@@ -18,13 +18,13 @@ import (
 
 var (
 	feedSettingTmpl = `
-订阅<b>设置</b>
+Subscription<b>Setup</b>
 [id] {{ .sub.ID }}
-[标题] {{ .source.Title }}
+[title] {{ .source.Title }}
 [Link] {{.source.Link }}
-[抓取更新] {{if ge .source.ErrorCount .Count }}暂停{{else if lt .source.ErrorCount .Count }}抓取中{{end}}
-[抓取频率] {{ .sub.Interval }}分钟
-[通知] {{if eq .sub.EnableNotification 0}}关闭{{else if eq .sub.EnableNotification 1}}开启{{end}}
+[Fetch updates] {{if ge .source.ErrorCount .Count }}暂停{{else if lt .source.ErrorCount .Count }}抓取中{{end}}
+[Crawl frequency] {{ .sub.Interval }}分钟
+[Notification] {{if eq .sub.EnableNotification 0}}关闭{{else if eq .sub.EnableNotification 1}}开启{{end}}
 [Telegraph] {{if eq .sub.EnableTelegraph 0}}关闭{{else if eq .sub.EnableTelegraph 1}}开启{{end}}
 [Tag] {{if .sub.Tag}}{{ .sub.Tag }}{{else}}无{{end}}
 `
@@ -40,7 +40,7 @@ func toggleCtrlButtons(c *tb.Callback, action string) {
 
 	data := strings.Split(c.Data, ":")
 	subscriberID, _ := strconv.Atoi(data[0])
-	// 如果订阅者与按钮点击者id不一致，需要验证管理员权限
+	// If the subscriber id is different from that of the button clicker, you need to verify the administrator authority
 	if subscriberID != c.Sender.ID {
 		channelChat, err := B.ChatByID(fmt.Sprintf("%d", subscriberID))
 
@@ -95,7 +95,7 @@ func toggleCtrlButtons(c *tb.Callback, action string) {
 
 	_ = t.Execute(text, map[string]interface{}{"source": source, "sub": sub, "Count": config.ErrorThreshold})
 	_ = B.Respond(c, &tb.CallbackResponse{
-		Text: "修改成功",
+		Text: "Successfully modified",
 	})
 	_, _ = B.Edit(c.Message, text.String(), &tb.SendOptions{
 		ParseMode: tb.ModeHTML,
@@ -107,7 +107,7 @@ func toggleCtrlButtons(c *tb.Callback, action string) {
 func startCmdCtr(m *tb.Message) {
 	user, _ := model.FindOrCreateUserByTelegramID(m.Chat.ID)
 	zap.S().Infof("/start user_id: %d telegram_id: %d", user.ID, user.TelegramID)
-	_, _ = B.Send(m.Chat, fmt.Sprintf("你好，欢迎使用flowerss。"))
+	_, _ = B.Send(m.Chat, fmt.Sprintf("Hello, welcome to flowerss."))
 }
 
 func subCmdCtr(m *tb.Message) {
@@ -118,7 +118,7 @@ func subCmdCtr(m *tb.Message) {
 		if url != "" {
 			registFeed(m.Chat, url)
 		} else {
-			_, err := B.Send(m.Chat, "请回复RSS URL", &tb.ReplyMarkup{ForceReply: true})
+			_, err := B.Send(m.Chat, "Please reply to RSS URL", &tb.ReplyMarkup{ForceReply: true})
 			if err == nil {
 				UserState[m.Chat.ID] = fsm.Sub
 			}
@@ -127,7 +127,7 @@ func subCmdCtr(m *tb.Message) {
 		if url != "" {
 			FeedForChannelRegister(m, url, mention)
 		} else {
-			_, _ = B.Send(m.Chat, "频道订阅请使用' /sub @ChannelID URL ' 命令")
+			_, _ = B.Send(m.Chat, "Please use channel subscription' /sub @ChannelID URL ' command")
 		}
 	}
 
@@ -143,7 +143,7 @@ func exportCmdCtr(m *tb.Message) {
 		sourceList, err = model.GetSourcesByUserID(m.Chat.ID)
 		if err != nil {
 			zap.S().Warnf(err.Error())
-			_, _ = B.Send(m.Chat, fmt.Sprintf("导出失败"))
+			_, _ = B.Send(m.Chat, fmt.Sprintf("Export failed"))
 			return
 		}
 	} else {
@@ -168,27 +168,27 @@ func exportCmdCtr(m *tb.Message) {
 		}
 
 		if !senderIsAdmin {
-			_, _ = B.Send(m.Chat, fmt.Sprintf("非频道管理员无法执行此操作"))
+			_, _ = B.Send(m.Chat, fmt.Sprintf("Non-channel managers cannot perform this operation"))
 			return
 		}
 
 		sourceList, err = model.GetSourcesByUserID(channelChat.ID)
 		if err != nil {
 			zap.S().Errorf(err.Error())
-			_, _ = B.Send(m.Chat, fmt.Sprintf("导出失败"))
+			_, _ = B.Send(m.Chat, fmt.Sprintf("Export failed"))
 			return
 		}
 	}
 
 	if len(sourceList) == 0 {
-		_, _ = B.Send(m.Chat, fmt.Sprintf("订阅列表为空"))
+		_, _ = B.Send(m.Chat, fmt.Sprintf("The subscription list is empty"))
 		return
 	}
 
 	opmlStr, err := ToOPML(sourceList)
 
 	if err != nil {
-		_, _ = B.Send(m.Chat, fmt.Sprintf("导出失败"))
+		_, _ = B.Send(m.Chat, fmt.Sprintf("Export failed"))
 		return
 	}
 	opmlFile := &tb.Document{File: tb.FromReader(strings.NewReader(opmlStr))}
@@ -196,7 +196,7 @@ func exportCmdCtr(m *tb.Message) {
 	_, err = B.Send(m.Chat, opmlFile)
 
 	if err != nil {
-		_, _ = B.Send(m.Chat, fmt.Sprintf("导出失败"))
+		_, _ = B.Send(m.Chat, fmt.Sprintf("Export failed"))
 		zap.S().Errorf("send opml file failed, err:%+v", err)
 	}
 
@@ -215,26 +215,26 @@ func listCmdCtr(m *tb.Message) {
 		}
 
 		if !checkPermitOfChat(int64(m.Sender.ID), channelChat) {
-			B.Send(m.Chat, fmt.Sprintf("非频道管理员无法执行此操作"))
+			B.Send(m.Chat, fmt.Sprintf("Non-channel managers cannot perform this operation"))
 			return
 		}
 
 		user, err := model.FindOrCreateUserByTelegramID(channelChat.ID)
 		if err != nil {
-			B.Send(m.Chat, fmt.Sprintf("内部错误 list@1"))
+			B.Send(m.Chat, fmt.Sprintf("Internal error list@1"))
 			return
 		}
 
 		subSourceMap, err := user.GetSubSourceMap()
 		if err != nil {
-			B.Send(m.Chat, fmt.Sprintf("内部错误 list@2"))
+			B.Send(m.Chat, fmt.Sprintf("Internal error list@2"))
 			return
 		}
 
 		sources, _ := model.GetSourcesByUserID(channelChat.ID)
-		rspMessage = fmt.Sprintf("频道 [%s](https://t.me/%s) 订阅列表：\n", channelChat.Title, channelChat.Username)
+		rspMessage = fmt.Sprintf("Channel [%s](https://t.me/%s) Subscription list：\n", channelChat.Title, channelChat.Username)
 		if len(sources) == 0 {
-			rspMessage = fmt.Sprintf("频道 [%s](https://t.me/%s) 订阅列表为空", channelChat.Title, channelChat.Username)
+			rspMessage = fmt.Sprintf("Channel [%s](https://t.me/%s) subscription list is empty", channelChat.Title, channelChat.Username)
 		} else {
 			for sub, source := range subSourceMap {
 				rspMessage = rspMessage + fmt.Sprintf("[[%d]] [%s](%s)\n", sub.ID, source.Title, source.Link)
@@ -243,25 +243,25 @@ func listCmdCtr(m *tb.Message) {
 	} else {
 		// private chat or group
 		if m.Chat.Type != tb.ChatPrivate && !checkPermitOfChat(int64(m.Sender.ID), m.Chat) {
-			// 无权限
+			// Channel
 			return
 		}
 
 		user, err := model.FindOrCreateUserByTelegramID(m.Chat.ID)
 		if err != nil {
-			B.Send(m.Chat, fmt.Sprintf("内部错误 list@1"))
+			B.Send(m.Chat, fmt.Sprintf("Internal error list@1"))
 			return
 		}
 
 		subSourceMap, err := user.GetSubSourceMap()
 		if err != nil {
-			B.Send(m.Chat, fmt.Sprintf("内部错误 list@2"))
+			B.Send(m.Chat, fmt.Sprintf("Internal error list@2"))
 			return
 		}
 
-		rspMessage = "当前订阅列表：\n"
+		rspMessage = "Current subscription list：\n"
 		if len(subSourceMap) == 0 {
-			rspMessage = "订阅列表为空"
+			rspMessage = "The subscription list is empty"
 		} else {
 			for sub, source := range subSourceMap {
 				rspMessage = rspMessage + fmt.Sprintf("[[%d]] [%s](%s)\n", sub.ID, source.Title, source.Link)
@@ -296,14 +296,14 @@ func checkCmdCtr(m *tb.Message) {
 		}
 
 		if !senderIsAdmin {
-			_, _ = B.Send(m.Chat, fmt.Sprintf("非频道管理员无法执行此操作"))
+			_, _ = B.Send(m.Chat, fmt.Sprintf("Non-channel managers cannot perform this operation"))
 			return
 		}
 
 		sources, _ := model.GetErrorSourcesByUserID(channelChat.ID)
-		message := fmt.Sprintf("频道 [%s](https://t.me/%s) 失效订阅的列表：\n", channelChat.Title, channelChat.Username)
+		message := fmt.Sprintf("Channel [%s](https://t.me/%s) List of expired subscriptions：\n", channelChat.Title, channelChat.Username)
 		if len(sources) == 0 {
-			message = fmt.Sprintf("频道 [%s](https://t.me/%s) 所有订阅正常", channelChat.Title, channelChat.Username)
+			message = fmt.Sprintf("Channel [%s](https://t.me/%s) All subscriptions are normal", channelChat.Title, channelChat.Username)
 		} else {
 			for _, source := range sources {
 				message = message + fmt.Sprintf("[[%d]] [%s](%s)\n", source.ID, source.Title, source.Link)
@@ -317,9 +317,9 @@ func checkCmdCtr(m *tb.Message) {
 
 	} else {
 		sources, _ := model.GetErrorSourcesByUserID(m.Chat.ID)
-		message := "失效订阅的列表：\n"
+		message := "List of expired subscriptions：\n"
 		if len(sources) == 0 {
-			message = "所有订阅正常"
+			message = "All subscriptions are normal"
 		} else {
 			for _, source := range sources {
 				message = message + fmt.Sprintf("[[%d]] [%s](%s)\n", source.ID, source.Title, source.Link)
@@ -343,7 +343,7 @@ func setCmdCtr(m *tb.Message) {
 		sources, _ = model.GetSourcesByUserID(m.Chat.ID)
 		ownerID = int64(m.Chat.ID)
 		if len(sources) <= 0 {
-			_, _ = B.Send(m.Chat, "当前没有订阅源")
+			_, _ = B.Send(m.Chat, "There are currently no feeds")
 			return
 		}
 
@@ -352,7 +352,7 @@ func setCmdCtr(m *tb.Message) {
 		channelChat, err := B.ChatByID(mention)
 
 		if err != nil {
-			_, _ = B.Send(m.Chat, "获取Channel信息错误。")
+			_, _ = B.Send(m.Chat, "Error obtaining Channel information.")
 			return
 		}
 
@@ -360,13 +360,13 @@ func setCmdCtr(m *tb.Message) {
 			sources, _ = model.GetSourcesByUserID(channelChat.ID)
 
 			if len(sources) <= 0 {
-				_, _ = B.Send(m.Chat, "Channel没有订阅源。")
+				_, _ = B.Send(m.Chat, "Channel has no feed.")
 				return
 			}
 			ownerID = channelChat.ID
 
 		} else {
-			_, _ = B.Send(m.Chat, "非Channel管理员无法执行此操作。")
+			_, _ = B.Send(m.Chat, "Non-Channel administrators cannot perform this operation.")
 			return
 		}
 
@@ -376,9 +376,9 @@ func setCmdCtr(m *tb.Message) {
 	replyKeys := [][]tb.ReplyButton{}
 	setFeedItemBtns := [][]tb.InlineButton{}
 
-	// 配置按钮
+	// Configure button
 	for _, source := range sources {
-		// 添加按钮
+		// Add button
 		text := fmt.Sprintf("%s %s", source.Title, source.Link)
 		replyButton = []tb.ReplyButton{
 			tb.ReplyButton{Text: text},
@@ -394,7 +394,7 @@ func setCmdCtr(m *tb.Message) {
 		})
 	}
 
-	_, _ = B.Send(m.Chat, "请选择你要设置的源", &tb.ReplyMarkup{
+	_, _ = B.Send(m.Chat, "Please select the source you want to set", &tb.ReplyMarkup{
 		InlineKeyboard: setFeedItemBtns,
 	})
 }
@@ -409,7 +409,7 @@ func setFeedItemBtnCtr(c *tb.Callback) {
 	data := strings.Split(c.Data, ":")
 	subscriberID, _ := strconv.Atoi(data[0])
 
-	// 如果订阅者与按钮点击者id不一致，需要验证管理员权限
+	// If the subscriber id is different from the button clicker id, you need to verify the administrator authority 
 
 	if subscriberID != c.Sender.ID {
 		channelChat, err := B.ChatByID(fmt.Sprintf("%d", subscriberID))
@@ -428,13 +428,13 @@ func setFeedItemBtnCtr(c *tb.Callback) {
 	source, err := model.GetSourceById(uint(sourceID))
 
 	if err != nil {
-		_, _ = B.Edit(c.Message, "找不到该订阅源，错误代码01。")
+		_, _ = B.Edit(c.Message, "The feed could not be found, error code 01.")
 		return
 	}
 
 	sub, err := model.GetSubscribeByUserIDAndSourceID(int64(subscriberID), source.ID)
 	if err != nil {
-		_, _ = B.Edit(c.Message, "用户未订阅该rss，错误代码02。")
+		_, _ = B.Edit(c.Message, "The user has not subscribed to the rss, the error code is 02.")
 		return
 	}
 
@@ -456,7 +456,7 @@ func setFeedItemBtnCtr(c *tb.Callback) {
 
 func setSubTagBtnCtr(c *tb.Callback) {
 
-	// 权限验证
+	// Permission Validation
 	if !feedSetAuth(c) {
 		return
 	}
@@ -468,13 +468,13 @@ func setSubTagBtnCtr(c *tb.Callback) {
 	if err != nil {
 		_, _ = B.Send(
 			c.Message.Chat,
-			"系统错误，代码04",
+			"System error, code 04",
 		)
 		return
 	}
 	msg := fmt.Sprintf(
-		"请使用`/setfeedtag %d tags`命令为该订阅设置标签，tags为需要设置的标签，以空格分隔。（最多设置三个标签） \n"+
-			"例如：`/setfeedtag %d 科技 苹果`",
+		"Please use the `/setfeedtag %d tags` command to set tags for this subscription. Tags are the tags to be set, separated by spaces. (Up to three labels can be set) \n"+
+			"For example: `/setfeedtag %d technology apple`",
 		sub.ID, sub.ID)
 
 	_ = B.Delete(c.Message)
@@ -489,36 +489,36 @@ func setSubTagBtnCtr(c *tb.Callback) {
 func genFeedSetBtn(c *tb.Callback, sub *model.Subscribe, source *model.Source) [][]tb.InlineButton {
 	setSubTagKey := tb.InlineButton{
 		Unique: "set_set_sub_tag_btn",
-		Text:   "标签设置",
+		Text:   "Label settings",
 		Data:   c.Data,
 	}
 
 	toggleNoticeKey := tb.InlineButton{
 		Unique: "set_toggle_notice_btn",
-		Text:   "开启通知",
+		Text:   "Turn on notifications",
 		Data:   c.Data,
 	}
 	if sub.EnableNotification == 1 {
-		toggleNoticeKey.Text = "关闭通知"
+		toggleNoticeKey.Text = "Close notification"
 	}
 
 	toggleTelegraphKey := tb.InlineButton{
 		Unique: "set_toggle_telegraph_btn",
-		Text:   "开启 Telegraph 转码",
+		Text:   "Turn on Telegraph transcoding",
 		Data:   c.Data,
 	}
 	if sub.EnableTelegraph == 1 {
-		toggleTelegraphKey.Text = "关闭 Telegraph 转码"
+		toggleTelegraphKey.Text = "Turn off Telegraph transcoding"
 	}
 
 	toggleEnabledKey := tb.InlineButton{
 		Unique: "set_toggle_update_btn",
-		Text:   "暂停更新",
+		Text:   "Pause update",
 		Data:   c.Data,
 	}
 
 	if source.ErrorCount >= config.ErrorThreshold {
-		toggleEnabledKey.Text = "重启更新"
+		toggleEnabledKey.Text = "Restart update"
 	}
 
 	feedSettingKeys := [][]tb.InlineButton{
@@ -555,7 +555,7 @@ func unsubCmdCtr(m *tb.Message) {
 			//Unsub by url
 			source, _ := model.GetSourceByUrl(url)
 			if source == nil {
-				_, _ = B.Send(m.Chat, "未订阅该RSS源")
+				_, _ = B.Send(m.Chat, "Not subscribed to this RSS feed")
 			} else {
 				err := model.UnsubByUserIDAndSource(m.Chat.ID, source)
 				if err == nil {
@@ -578,7 +578,7 @@ func unsubCmdCtr(m *tb.Message) {
 			subs, err := model.GetSubsByUserID(m.Chat.ID)
 
 			if err != nil {
-				errorCtr(m, "Bot错误，请联系管理员！错误代码01")
+				errorCtr(m, "Bot error, please contact the administrator! Error code 01")
 				return
 			}
 
@@ -589,7 +589,7 @@ func unsubCmdCtr(m *tb.Message) {
 
 					source, err := model.GetSourceById(sub.SourceID)
 					if err != nil {
-						errorCtr(m, "Bot错误，请联系管理员！错误代码02")
+						errorCtr(m, "Bot error, please contact the administrator! Error code 02")
 						return
 					}
 
@@ -602,11 +602,11 @@ func unsubCmdCtr(m *tb.Message) {
 					})
 				}
 
-				_, _ = B.Send(m.Chat, "请选择你要退订的源", &tb.ReplyMarkup{
+				_, _ = B.Send(m.Chat, "Please select the source you want to unsubscribe", &tb.ReplyMarkup{
 					InlineKeyboard: unsubFeedItemBtns,
 				})
 			} else {
-				_, _ = B.Send(m.Chat, "当前没有订阅源")
+				_, _ = B.Send(m.Chat, "There are currently no feeds")
 			}
 		}
 	} else {
@@ -630,7 +630,7 @@ func unsubCmdCtr(m *tb.Message) {
 			}
 
 			if !senderIsAdmin {
-				_, _ = B.Send(m.Chat, fmt.Sprintf("非频道管理员无法执行此操作"))
+				_, _ = B.Send(m.Chat, fmt.Sprintf("Non-channel managers cannot perform this operation"))
 				return
 			}
 
@@ -641,7 +641,7 @@ func unsubCmdCtr(m *tb.Message) {
 				if err.Error() == "record not found" {
 					_, _ = B.Send(
 						m.Chat,
-						fmt.Sprintf("频道 [%s](https://t.me/%s) 未订阅该RSS源", channelChat.Title, channelChat.Username),
+						fmt.Sprintf("Channel [%s](https://t.me/%s) not subscribed to this RSS feed", channelChat.Title, channelChat.Username),
 						&tb.SendOptions{
 							DisableWebPagePreview: true,
 							ParseMode:             tb.ModeMarkdown,
@@ -649,7 +649,7 @@ func unsubCmdCtr(m *tb.Message) {
 					)
 
 				} else {
-					_, _ = B.Send(m.Chat, "退订失败")
+					_, _ = B.Send(m.Chat, "Failed to unsubscribe")
 				}
 				return
 
@@ -659,7 +659,7 @@ func unsubCmdCtr(m *tb.Message) {
 			if err == nil {
 				_, _ = B.Send(
 					m.Chat,
-					fmt.Sprintf("频道 [%s](https://t.me/%s) 退订 [%s](%s) 成功", channelChat.Title, channelChat.Username, source.Title, source.Link),
+					fmt.Sprintf("Channel [%s](https://t.me/%s) sucessfully [%s](%s) unsubscribed", channelChat.Title, channelChat.Username, source.Title, source.Link),
 					&tb.SendOptions{
 						DisableWebPagePreview: true,
 						ParseMode:             tb.ModeMarkdown,
@@ -672,7 +672,7 @@ func unsubCmdCtr(m *tb.Message) {
 			return
 
 		}
-		_, _ = B.Send(m.Chat, "频道退订请使用' /unsub @ChannelID URL ' 命令")
+		_, _ = B.Send(m.Chat, "Please use the '/unsub @ChannelID URL' command to unsubscribe the channel")
 	}
 
 }
@@ -692,7 +692,7 @@ func unsubFeedItemBtnCtr(c *tb.Callback) {
 		sourceID, _ := strconv.Atoi(data[2])
 		source, _ := model.GetSourceById(uint(sourceID))
 
-		rtnMsg := fmt.Sprintf("[%d] <a href=\"%s\">%s</a> 退订成功", sourceID, source.Link, source.Title)
+		rtnMsg := fmt.Sprintf("[%d] <a href=\"%s\">%s</a> Successfully unsubscribed", sourceID, source.Link, source.Title)
 
 		err := model.UnsubByUserIDAndSubID(int64(userID), uint(subID))
 
@@ -707,7 +707,7 @@ func unsubFeedItemBtnCtr(c *tb.Callback) {
 			return
 		}
 	}
-	_, _ = B.Edit(c.Message, "退订错误！")
+	_, _ = B.Edit(c.Message, "Unsubscribe error！")
 }
 
 func unsubAllCmdCtr(m *tb.Message) {
@@ -716,20 +716,20 @@ func unsubAllCmdCtr(m *tb.Message) {
 	confirmKeys = append(confirmKeys, []tb.InlineButton{
 		tb.InlineButton{
 			Unique: "unsub_all_confirm_btn",
-			Text:   "确认",
+			Text:   "Confirm",
 		},
 		tb.InlineButton{
 			Unique: "unsub_all_cancel_btn",
-			Text:   "取消",
+			Text:   "Cancel",
 		},
 	})
 
 	var msg string
 
 	if mention == "" {
-		msg = "是否退订当前用户的所有订阅？"
+		msg = "Do you want to unsubscribe from all subscriptions of the current user?"
 	} else {
-		msg = fmt.Sprintf("%s 是否退订该 Channel 所有订阅？", mention)
+		msg = fmt.Sprintf("%s Do you want to unsubscribe from all subscriptions of this Channel?", mention)
 	}
 
 	_, _ = B.Send(
@@ -744,7 +744,7 @@ func unsubAllCmdCtr(m *tb.Message) {
 }
 
 func unsubAllCancelBtnCtr(c *tb.Callback) {
-	_, _ = B.Edit(c.Message, "操作取消")
+	_, _ = B.Edit(c.Message, "Operation canceled")
 }
 
 func unsubAllConfirmBtnCtr(c *tb.Callback) {
@@ -753,9 +753,9 @@ func unsubAllConfirmBtnCtr(c *tb.Callback) {
 	if mention == "" {
 		success, fail, err := model.UnsubAllByUserID(int64(c.Sender.ID))
 		if err != nil {
-			msg = "退订失败"
+			msg = "Failed to unsubscribe"
 		} else {
-			msg = fmt.Sprintf("退订成功：%d\n退订失败：%d", success, fail)
+			msg = fmt.Sprintf("Sucessfully Unsubscribed：%d\nFailed to unsubscribe：%d", success, fail)
 		}
 
 	} else {
@@ -769,14 +769,14 @@ func unsubAllConfirmBtnCtr(c *tb.Callback) {
 		if UserIsAdminChannel(c.Sender.ID, channelChat) {
 			success, fail, err := model.UnsubAllByUserID(channelChat.ID)
 			if err != nil {
-				msg = "退订失败"
+				msg = "Failed to unsubscribe"
 
 			} else {
-				msg = fmt.Sprintf("退订成功：%d\n退订失败：%d", success, fail)
+				msg = fmt.Sprintf("Sucessfully Unsubscribed：%d\nFailed to unsubscribe：%d", success, fail)
 			}
 
 		} else {
-			msg = "非频道管理员无法执行此操作"
+			msg = "Non-channel managers cannot perform this operation"
 		}
 	}
 
@@ -793,21 +793,22 @@ func pingCmdCtr(m *tb.Message) {
 
 func helpCmdCtr(m *tb.Message) {
 	message := `
-命令：
-/sub 订阅源
-/unsub  取消订阅
-/list 查看当前订阅源
-/set 设置订阅
-/check 检查当前订阅
-/setfeedtag 设置订阅标签
-/setinterval 设置订阅刷新频率
-/activeall 开启所有订阅
-/pauseall 暂停所有订阅
-/help 帮助
-/import 导入 OPML 文件
-/export 导出 OPML 文件
-/unsuball 取消所有订阅
-详细使用方法请看：https://github.com/indes/flowerss-bot
+Commands：
+/sub [url] Subscribe (url is optional)
+/unsub [url] Unsubscribe (url is optional)
+/list View current subscriptions
+/set Set subscription
+/check check current subscription
+/setfeedtag [sub id] [tag1] [tag2] Set the subscription tag (set up to three tags, separated by spaces)
+/setinterval [interval] [sub id] Set subscription refresh frequency (multiple sub ids can be set, separated by spaces)
+/activeall open all subscriptions
+/pauseall Pause all subscriptions
+/import Import OPML files
+/export Export OPML file
+/unsuball cancel all subscriptions
+/help Get this message
+
+For detailed usage, please see: https://github.com/reaitten/flowerss-bot 
 `
 
 	_, _ = B.Send(m.Chat, message)
@@ -818,8 +819,8 @@ func versionCmdCtr(m *tb.Message) {
 }
 
 func importCmdCtr(m *tb.Message) {
-	message := `请直接发送OPML文件，
-如果需要为channel导入OPML，请在发送文件的时候附上channel id，例如@telegram
+	message := `Please send the OPML file directly,
+If you need to import OPML for the channel, please include the channel ID when sending the file, Example: @telegram
 `
 	_, _ = B.Send(m.Chat, message)
 }
@@ -829,20 +830,20 @@ func setFeedTagCmdCtr(m *tb.Message) {
 	args := strings.Split(m.Payload, " ")
 
 	if len(args) < 1 {
-		B.Send(m.Chat, "/setfeedtag [sub id] [tag1] [tag2] 设置订阅标签（最多设置三个Tag，以空格分割）")
+		B.Send(m.Chat, "/setfeedtag [sub id] [tag1] [tag2] Set subscription tags (up to three tags, separated by spaces)")
 		return
 	}
 
 	var subID int
 	var err error
 	if mention == "" {
-		// 截短参数
+		// Truncation parameter
 		if len(args) > 4 {
 			args = args[:4]
 		}
 		subID, err = strconv.Atoi(args[0])
 		if err != nil {
-			B.Send(m.Chat, "请输入正确的订阅id!")
+			B.Send(m.Chat, "Please enter the correct subscription ID!")
 			return
 		}
 	} else {
@@ -851,19 +852,19 @@ func setFeedTagCmdCtr(m *tb.Message) {
 		}
 		subID, err = strconv.Atoi(args[1])
 		if err != nil {
-			B.Send(m.Chat, "请输入正确的订阅id!")
+			B.Send(m.Chat, "Please enter the correct subscription ID!")
 			return
 		}
 	}
 
 	sub, err := model.GetSubscribeByID(subID)
 	if err != nil || sub == nil {
-		B.Send(m.Chat, "请输入正确的订阅id!")
+		B.Send(m.Chat, "Please enter the correct subscription ID!")
 		return
 	}
 
 	if !checkPermit(int64(m.Sender.ID), sub.UserID) {
-		B.Send(m.Chat, "没有权限!")
+		B.Send(m.Chat, "Permission denied!")
 		return
 	}
 
@@ -874,10 +875,10 @@ func setFeedTagCmdCtr(m *tb.Message) {
 	}
 
 	if err != nil {
-		B.Send(m.Chat, "订阅标签设置失败!")
+		B.Send(m.Chat, "Failed to set subscription label!")
 		return
 	}
-	B.Send(m.Chat, "订阅标签设置成功!")
+	B.Send(m.Chat, "The subscription label is set successfully!")
 }
 
 func setIntervalCmdCtr(m *tb.Message) {
@@ -885,13 +886,13 @@ func setIntervalCmdCtr(m *tb.Message) {
 	args := strings.Split(m.Payload, " ")
 
 	if len(args) < 1 {
-		_, _ = B.Send(m.Chat, "/setinterval [interval] [sub id] 设置订阅刷新频率（可设置多个sub id，以空格分割）")
+		_, _ = B.Send(m.Chat, "/setinterval [interval] [sub id] Set subscription refresh frequency (multiple sub id can be set, separated by spaces)")
 		return
 	}
 
 	interval, err := strconv.Atoi(args[0])
 	if interval <= 0 || err != nil {
-		_, _ = B.Send(m.Chat, "请输入正确的抓取频率")
+		_, _ = B.Send(m.Chat, "Please enter the correct crawl frequency")
 		return
 	}
 
@@ -899,26 +900,26 @@ func setIntervalCmdCtr(m *tb.Message) {
 
 		subID, err := strconv.Atoi(id)
 		if err != nil {
-			_, _ = B.Send(m.Chat, "请输入正确的订阅id!")
+			_, _ = B.Send(m.Chat, "Please enter the correct subscription id!")
 			return
 		}
 
 		sub, err := model.GetSubscribeByID(subID)
 
 		if err != nil || sub == nil {
-			_, _ = B.Send(m.Chat, "请输入正确的订阅id!")
+			_, _ = B.Send(m.Chat, "Please enter the correct subscription id!")
 			return
 		}
 
 		if !checkPermit(int64(m.Sender.ID), sub.UserID) {
-			_, _ = B.Send(m.Chat, "没有权限!")
+			_, _ = B.Send(m.Chat, "Permission denied!")
 			return
 		}
 
 		_ = sub.SetInterval(interval)
 
 	}
-	_, _ = B.Send(m.Chat, "抓取频率设置成功!")
+	_, _ = B.Send(m.Chat, "Crawl frequency is set successfully!")
 
 	return
 }
@@ -945,12 +946,12 @@ func activeAllCmdCtr(m *tb.Message) {
 		}
 
 		if !senderIsAdmin {
-			_, _ = B.Send(m.Chat, fmt.Sprintf("非频道管理员无法执行此操作"))
+			_, _ = B.Send(m.Chat, fmt.Sprintf("Non-channel managers cannot perform this operation"))
 			return
 		}
 
 		_ = model.ActiveSourcesByUserID(channelChat.ID)
-		message := fmt.Sprintf("频道 [%s](https://t.me/%s) 订阅已全部开启", channelChat.Title, channelChat.Username)
+		message := fmt.Sprintf("Channel [%s](https://t.me/%s) subscriptions are all turned on", channelChat.Title, channelChat.Username)
 
 		_, _ = B.Send(m.Chat, message, &tb.SendOptions{
 			DisableWebPagePreview: true,
@@ -959,7 +960,7 @@ func activeAllCmdCtr(m *tb.Message) {
 
 	} else {
 		_ = model.ActiveSourcesByUserID(m.Chat.ID)
-		message := "订阅已全部开启"
+		message := "Subscriptions are all turned on"
 
 		_, _ = B.Send(m.Chat, message, &tb.SendOptions{
 			DisableWebPagePreview: true,
@@ -991,12 +992,12 @@ func pauseAllCmdCtr(m *tb.Message) {
 		}
 
 		if !senderIsAdmin {
-			_, _ = B.Send(m.Chat, fmt.Sprintf("非频道管理员无法执行此操作"))
+			_, _ = B.Send(m.Chat, fmt.Sprintf("Non-channel managers cannot perform this operation"))
 			return
 		}
 
 		_ = model.PauseSourcesByUserID(channelChat.ID)
-		message := fmt.Sprintf("频道 [%s](https://t.me/%s) 订阅已全部暂停", channelChat.Title, channelChat.Username)
+		message := fmt.Sprintf("Channel [%s](https://t.me/%s) all subscriptions are suspended", channelChat.Title, channelChat.Username)
 
 		_, _ = B.Send(m.Chat, message, &tb.SendOptions{
 			DisableWebPagePreview: true,
@@ -1005,7 +1006,7 @@ func pauseAllCmdCtr(m *tb.Message) {
 
 	} else {
 		_ = model.PauseSourcesByUserID(m.Chat.ID)
-		message := "订阅已全部暂停"
+		message := "All subscriptions are suspended"
 
 		_, _ = B.Send(m.Chat, message, &tb.SendOptions{
 			DisableWebPagePreview: true,
@@ -1022,32 +1023,32 @@ func textCtr(m *tb.Message) {
 			str := strings.Split(m.Text, " ")
 
 			if len(str) < 2 && (strings.HasPrefix(str[0], "[") && strings.HasSuffix(str[0], "]")) {
-				_, _ = B.Send(m.Chat, "请选择正确的指令！")
+				_, _ = B.Send(m.Chat, "Please choose the correct instruction!")
 			} else {
 
 				var sourceID uint
 				if _, err := fmt.Sscanf(str[0], "[%d]", &sourceID); err != nil {
-					_, _ = B.Send(m.Chat, "请选择正确的指令！")
+					_, _ = B.Send(m.Chat, "Please choose the correct instruction!")
 					return
 				}
 
 				source, err := model.GetSourceById(sourceID)
 
 				if err != nil {
-					_, _ = B.Send(m.Chat, "请选择正确的指令！")
+					_, _ = B.Send(m.Chat, "Please choose the correct instruction!")
 					return
 				}
 
 				err = model.UnsubByUserIDAndSource(m.Chat.ID, source)
 
 				if err != nil {
-					_, _ = B.Send(m.Chat, "请选择正确的指令！")
+					_, _ = B.Send(m.Chat, "Please choose the correct instruction!")
 					return
 				}
 
 				_, _ = B.Send(
 					m.Chat,
-					fmt.Sprintf("[%s](%s) 退订成功", source.Title, source.Link),
+					fmt.Sprintf("[%s](%s) successfully unsubscribed", source.Title, source.Link),
 					&tb.SendOptions{
 						ParseMode: tb.ModeMarkdown,
 					}, &tb.ReplyMarkup{
@@ -1063,7 +1064,7 @@ func textCtr(m *tb.Message) {
 		{
 			url := strings.Split(m.Text, " ")
 			if !CheckURL(url[0]) {
-				_, _ = B.Send(m.Chat, "请回复正确的URL", &tb.ReplyMarkup{ForceReply: true})
+				_, _ = B.Send(m.Chat, "Please reply to the correct URL", &tb.ReplyMarkup{ForceReply: true})
 				return
 			}
 
@@ -1079,17 +1080,17 @@ func textCtr(m *tb.Message) {
 			str := strings.Split(m.Text, " ")
 			url := str[len(str)-1]
 			if len(str) != 2 && !CheckURL(url) {
-				_, _ = B.Send(m.Chat, "请选择正确的指令！")
+				_, _ = B.Send(m.Chat, "Please choose the correct instruction!")
 			} else {
 				source, err := model.GetSourceByUrl(url)
 
 				if err != nil {
-					_, _ = B.Send(m.Chat, "请选择正确的指令！")
+					_, _ = B.Send(m.Chat, "Please choose the correct instruction!")
 					return
 				}
 				sub, err := model.GetSubscribeByUserIDAndSourceID(m.Chat.ID, source.ID)
 				if err != nil {
-					_, _ = B.Send(m.Chat, "请选择正确的指令！")
+					_, _ = B.Send(m.Chat, "Please choose the correct instruction!")
 					return
 				}
 				t := template.New("setting template")
@@ -1097,27 +1098,27 @@ func textCtr(m *tb.Message) {
 
 				toggleNoticeKey := tb.InlineButton{
 					Unique: "set_toggle_notice_btn",
-					Text:   "开启通知",
+					Text:   "Turn on notifications",
 				}
 				if sub.EnableNotification == 1 {
-					toggleNoticeKey.Text = "关闭通知"
+					toggleNoticeKey.Text = "Close notification"
 				}
 
 				toggleTelegraphKey := tb.InlineButton{
 					Unique: "set_toggle_telegraph_btn",
-					Text:   "开启 Telegraph 转码",
+					Text:   "Turn on Telegraph transcoding",
 				}
 				if sub.EnableTelegraph == 1 {
-					toggleTelegraphKey.Text = "关闭 Telegraph 转码"
+					toggleTelegraphKey.Text = "Turn off Telegraph transcoding"
 				}
 
 				toggleEnabledKey := tb.InlineButton{
 					Unique: "set_toggle_update_btn",
-					Text:   "暂停更新",
+					Text:   "Pause update",
 				}
 
 				if source.ErrorCount >= config.ErrorThreshold {
-					toggleEnabledKey.Text = "重启更新"
+					toggleEnabledKey.Text = "Restart update"
 				}
 
 				feedSettingKeys := [][]tb.InlineButton{
@@ -1167,7 +1168,7 @@ func docCtr(m *tb.Message) {
 
 	url, _ := B.FileURLByID(m.Document.FileID)
 	if !strings.HasSuffix(url, ".opml") {
-		B.Send(m.Chat, "如果需要导入订阅，请发送正确的 OPML 文件。")
+		B.Send(m.Chat, "If you need to import subscriptions, please send the correct OPML file.")
 		return
 	}
 
@@ -1175,13 +1176,13 @@ func docCtr(m *tb.Message) {
 	if err != nil {
 		if err.Error() == "fetch opml file error" {
 			_, _ = B.Send(m.Chat,
-				"下载 OPML 文件失败，请检查 bot 服务器能否正常连接至 Telegram 服务器或稍后尝试导入。错误代码 02")
+				"Failed to download the OPML file. Please check whether the bot server can connect to the Telegram server normally or try to import it later. Error code 02)
 
 		} else {
 			_, _ = B.Send(
 				m.Chat,
 				fmt.Sprintf(
-					"如果需要导入订阅，请发送正确的 OPML 文件。错误代码 01，doc mimetype: %s",
+					"If you need to import subscriptions, please send the correct OPML file. Error code 01, doc mimetype: %s",
 					m.Document.MIME),
 			)
 		}
@@ -1194,19 +1195,19 @@ func docCtr(m *tb.Message) {
 		// import for channel
 		channelChat, err := B.ChatByID(mention)
 		if err != nil {
-			_, _ = B.Send(m.Chat, "获取channel信息错误，请检查channel id是否正确")
+			_, _ = B.Send(m.Chat, "Get channel information error, please check if the channel id is correct")
 			return
 		}
 
 		if !checkPermitOfChat(int64(m.Sender.ID), channelChat) {
-			_, _ = B.Send(m.Chat, fmt.Sprintf("非频道管理员无法执行此操作"))
+			_, _ = B.Send(m.Chat, fmt.Sprintf("Non-channel managers cannot perform this operation"))
 			return
 		}
 
 		userID = channelChat.ID
 	}
 
-	message, _ := B.Send(m.Chat, "处理中，请稍后...")
+	message, _ := B.Send(m.Chat, "Processing, please wait...")
 	outlines, _ := opml.GetFlattenOutlines()
 	var failImportList []Outline
 	var successImportList []Outline
@@ -1226,9 +1227,9 @@ func docCtr(m *tb.Message) {
 		successImportList = append(successImportList, outline)
 	}
 
-	importReport := fmt.Sprintf("<b>导入成功：%d，导入失败：%d</b>", len(successImportList), len(failImportList))
+	importReport := fmt.Sprintf("<b>Imported successfully：%d，Import failed：%d</b>", len(successImportList), len(failImportList))
 	if len(successImportList) != 0 {
-		successReport := "\n\n<b>以下订阅源导入成功:</b>"
+		successReport := "\n\n<b>The following feeds were imported successfully:</b>"
 		for i, line := range successImportList {
 			if line.Text != "" {
 				successReport += fmt.Sprintf("\n[%d] <a href=\"%s\">%s</a>", i+1, line.XMLURL, line.Text)
@@ -1240,7 +1241,7 @@ func docCtr(m *tb.Message) {
 	}
 
 	if len(failImportList) != 0 {
-		failReport := "\n\n<b>以下订阅源导入失败:</b>"
+		failReport := "\n\n<b>The following feed failed to import:</b>"
 		for i, line := range failImportList {
 			if line.Text != "" {
 				failReport += fmt.Sprintf("\n[%d] <a href=\"%s\">%s</a>", i+1, line.XMLURL, line.Text)
