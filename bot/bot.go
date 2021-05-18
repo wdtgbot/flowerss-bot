@@ -4,14 +4,14 @@ import (
 	"go.uber.org/zap"
 	"time"
 
-	"github.com/indes/flowerss-bot/bot/fsm"
-	"github.com/indes/flowerss-bot/config"
-	"github.com/indes/flowerss-bot/util"
+	"github.com/reaitten/flowerss-bot/bot/fsm"
+	"github.com/reaitten/flowerss-bot/config"
+	"github.com/reaitten/flowerss-bot/util"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
 var (
-	// UserState 用户状态，用于标示当前用户操作所在状态
+	// User state，Used to indicate the status of the current user operation
 	UserState map[int64]fsm.UserStatus = make(map[int64]fsm.UserStatus)
 
 	// B telebot
@@ -25,7 +25,7 @@ func init() {
 	poller := &tb.LongPoller{Timeout: 10 * time.Second}
 	spamProtected := tb.NewMiddlewarePoller(poller, func(upd *tb.Update) bool {
 		if !isUserAllowed(upd) {
-			// 检查用户是否可以使用bot
+			// Check if the user can use the bot
 			return false
 		}
 
@@ -66,27 +66,27 @@ func Start() {
 }
 
 func setCommands() {
-	// 设置bot命令提示信息
+	// Set bot command prompt information
 	commands := []tb.Command{
-		{"start", "开始使用"},
-		{"sub", "订阅rss源"},
-		{"list", "当前订阅的rss源"},
-		{"unsub", "退订rss源"},
-		{"unsuball", "退订所有rss源"},
+		{"start", "Get started"},
+		{"sub", "Subscribe to RSS feed"},
+		{"list", "RSS feeds currently subscribed"},
+		{"unsub", "Unsubscribe rss feed"},
+		{"unsuball", "Unsubscribe from all rss sources"},
 
-		{"set", "设置rss订阅"},
-		{"setfeedtag", "设置rss订阅标签"},
-		{"setinterval", "设置rss订阅抓取间隔"},
+		{"set", "Set up rss subscription"},
+		{"setfeedtag", "Set rss subscription label"},
+		{"setinterval", "Set RSS subscription crawl interval"},
 
-		{"export", "导出订阅为opml文件"},
-		{"import", "从opml文件导入订阅"},
+		{"export", "Export subscription as OPML file"},
+			{"import", "Import subscription from opml file"},
 
-		{"check", "检查我的rss订阅状态"},
-		{"pauseall", "停止抓取订阅更新"},
-		{"activeall", "开启抓取订阅更新"},
+		{"check", "Check the status of my rss subscription"},
+		{"pauseall", "Stop crawling subscription updates"},
+		{"activeall", "Turn on fetching subscription updates"},
 
-		{"help", "使用帮助"},
-		{"version", "bot版本"},
+		{"help", "Using help"},
+		{"version", "bot version"},
 	}
 
 	zap.S().Debugf("set bot command %+v", commands)
