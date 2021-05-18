@@ -5,15 +5,15 @@ import (
 	"go.uber.org/zap"
 	"strings"
 
-	"github.com/indes/flowerss-bot/config"
-	"github.com/indes/flowerss-bot/model"
+	"github.com/reaitten/flowerss-bot/config"
+	"github.com/reaitten/flowerss-bot/model"
 
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
 // FeedForChannelRegister register feed for channel
 func FeedForChannelRegister(m *tb.Message, url string, channelMention string) {
-	msg, err := B.Send(m.Chat, "处理中...")
+	msg, err := B.Send(m.Chat, "Processing...")
 	channelChat, err := B.ChatByID(channelMention)
 	adminList, err := B.AdminsOf(channelChat)
 
@@ -29,19 +29,19 @@ func FeedForChannelRegister(m *tb.Message, url string, channelMention string) {
 	}
 
 	if !botIsAdmin {
-		msg, _ = B.Edit(msg, fmt.Sprintf("请先将bot添加为频道管理员"))
+		msg, _ = B.Edit(msg, fmt.Sprintf("Please add bot as a channel manager first"))
 		return
 	}
 
 	if !senderIsAdmin {
-		msg, _ = B.Edit(msg, fmt.Sprintf("非频道管理员无法执行此操作"))
+		msg, _ = B.Edit(msg, fmt.Sprintf("Non-channel managers cannot perform this operation"))
 		return
 	}
 
 	source, err := model.FindOrNewSourceByUrl(url)
 
 	if err != nil {
-		msg, _ = B.Edit(msg, fmt.Sprintf("%s，订阅失败", err))
+		msg, _ = B.Edit(msg, fmt.Sprintf("%s，Subscription failed", err))
 		return
 	}
 
@@ -50,7 +50,7 @@ func FeedForChannelRegister(m *tb.Message, url string, channelMention string) {
 
 	if err == nil {
 		newText := fmt.Sprintf(
-			"频道 [%s](https://t.me/%s) 订阅 [%s](%s) 成功",
+			"Channel [%s](https://t.me/%s) subscription [%s](%s) success",
 			channelChat.Title,
 			channelChat.Username,
 			source.Title,
@@ -62,17 +62,17 @@ func FeedForChannelRegister(m *tb.Message, url string, channelMention string) {
 				ParseMode:             tb.ModeMarkdown,
 			})
 	} else {
-		_, _ = B.Edit(msg, "订阅失败")
+		_, _ = B.Edit(msg, "Subscription failed")
 	}
 }
 
 func registFeed(chat *tb.Chat, url string) {
-	msg, err := B.Send(chat, "处理中...")
+	msg, err := B.Send(chat, "Processing...")
 
 	source, err := model.FindOrNewSourceByUrl(url)
 
 	if err != nil {
-		msg, _ = B.Edit(msg, fmt.Sprintf("%s，订阅失败", err))
+		msg, _ = B.Edit(msg, fmt.Sprintf("%s，Subscription failed", err))
 		return
 	}
 
@@ -80,19 +80,19 @@ func registFeed(chat *tb.Chat, url string) {
 	zap.S().Infof("%d subscribe [%d]%s %s", chat.ID, source.ID, source.Title, source.Link)
 
 	if err == nil {
-		_, _ = B.Edit(msg, fmt.Sprintf("[%s](%s) 订阅成功", source.Title, source.Link),
+		_, _ = B.Edit(msg, fmt.Sprintf("[%s](%s) Successfully subscribed", source.Title, source.Link),
 			&tb.SendOptions{
 				DisableWebPagePreview: true,
 				ParseMode:             tb.ModeMarkdown,
 			})
 	} else {
-		_, _ = B.Edit(msg, "订阅失败")
+		_, _ = B.Edit(msg, "Subscription failed")
 	}
 }
 
 //SendError send error user
 func SendError(c *tb.Chat) {
-	_, _ = B.Send(c, "请输入正确的指令！")
+	_, _ = B.Send(c, "Please enter the correct instruction!")
 }
 
 //BroadcastNews send new contents message to subscriber
@@ -167,7 +167,7 @@ func BroadcastSourceError(source *model.Source) {
 	subs := model.GetSubscriberBySource(source)
 	var u tb.User
 	for _, sub := range subs {
-		message := fmt.Sprintf("[%s](%s) 已经累计连续%d次更新失败，暂时停止更新", source.Title, source.Link, config.ErrorThreshold)
+		message := fmt.Sprintf("[%s](%s) Accumulatively %d consecutive update failed, temporarily stop the update", source.Title, source.Link, config.ErrorThreshold)
 		u.ID = int(sub.UserID)
 		_, _ = B.Send(&u, message, &tb.SendOptions{
 			ParseMode: tb.ModeMarkdown,
