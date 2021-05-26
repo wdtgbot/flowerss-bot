@@ -88,7 +88,7 @@ Configuration instructions:
 | update_interval           | RSS feed scan interval (minutes)                             | Ignorable (default 10) |
 | error_threshold           | Maximum number of source errors                              | Ignorable (default 100) |
 | socks5                    | Used in environments where the Telegram API cannot work      | Ignorable (Can connect to the Telegram API server normally) |
-| mysql | MySQL database configuration | Ignorable (using SQLite) |
+| mysql | MySQL database configuration. You can use [ElephantSQL](elephantsql.com) free plan. | Ignorable (using SQLite) |
 | sqlite | SQLite configuration | Ignorable (this item is invalid when mysql is configured) |
 | telegram.endpoint | Custom telegram bot api url | Ignorable (use the default api url) |
 | allowed_users | Telegram id of users allowed to use bot, | can be ignored, all users can use bot when it is empty |
