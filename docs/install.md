@@ -52,8 +52,8 @@ Create a new `config.yml` file based on the following template.
 bot_token: XXX
 #Multiple telegraph_token can be in array format:
 # telegraph_token:
-#-token_1
-#-token_2
+#  - token_1
+#  - token_2
 telegraph_token: xxxx
 user_agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
 preview_text: 0
@@ -72,8 +72,8 @@ mysql:
 sqlite:
   path: ./data.db
 allowed_users:
-  -123
-  -234
+  - 123
+  - 234
 ```
 
 Configuration instructions:
