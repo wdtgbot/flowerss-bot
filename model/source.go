@@ -89,7 +89,7 @@ func FindOrNewSourceByUrl(url string) (*Source, error) {
 			feed, err := rss.FetchByFunc(fetchFunc, url)
 
 			if err != nil {
-				return nil, fmt.Errorf("Feed 抓取错误 %v", err)
+				return nil, fmt.Errorf("Feed crawl error %v", err)
 			}
 
 			source.Title = feed.Title
@@ -275,7 +275,7 @@ func GetSourceById(id uint) (*Source, error) {
 	var source Source
 
 	if err := db.Where("id=?", id).First(&source); err.Error != nil {
-		return nil, errors.New("未找到 RSS 源")
+		return nil, errors.New("RSS feed not found")
 	}
 
 	return &source, nil
