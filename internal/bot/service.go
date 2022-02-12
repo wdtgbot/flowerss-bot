@@ -2,16 +2,17 @@ package bot
 
 import (
 	"fmt"
-	"go.uber.org/zap"
+	"regexp"
 	"strings"
 
-	"github.com/reaitten/flowerss-bot/config"
-	"github.com/reaitten/flowerss-bot/model"
+	"github.com/reaitten/flowerss-bot/internal/config"
+	"github.com/reaitten/flowerss-bot/internal/model"
 
+	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
-// FeedForChannelRegister register feed for channel
+// FeedForChannelRegister register fetcher for channel
 func FeedForChannelRegister(m *tb.Message, url string, channelMention string) {
 	msg, err := B.Send(m.Chat, "Processing...")
 	channelChat, err := B.ChatByID(channelMention)
@@ -41,7 +42,7 @@ func FeedForChannelRegister(m *tb.Message, url string, channelMention string) {
 	source, err := model.FindOrNewSourceByUrl(url)
 
 	if err != nil {
-		msg, _ = B.Edit(msg, fmt.Sprintf("%s，Subscription failed", err))
+		msg, _ = B.Edit(msg, fmt.Sprintf("%s, Subscription failed", err))
 		return
 	}
 
@@ -68,11 +69,11 @@ func FeedForChannelRegister(m *tb.Message, url string, channelMention string) {
 
 func registFeed(chat *tb.Chat, url string) {
 	msg, err := B.Send(chat, "Processing...")
-
+	url = model.ProcessWechatURL(url)
 	source, err := model.FindOrNewSourceByUrl(url)
 
 	if err != nil {
-		msg, _ = B.Edit(msg, fmt.Sprintf("%s，Subscription failed", err))
+		msg, _ = B.Edit(msg, fmt.Sprintf("%s, Subscription failed", err))
 		return
 	}
 
@@ -96,10 +97,10 @@ func SendError(c *tb.Chat) {
 }
 
 //BroadcastNews send new contents message to subscriber
-func BroadcastNews(source *model.Source, subs []model.Subscribe, contents []model.Content) {
+func BroadcastNews(source *model.Source, subs []*model.Subscribe, contents []*model.Content) {
 	zap.S().Infow("broadcast news",
-		"feed id", source.ID,
-		"feed title", source.Title,
+		"fetcher id", source.ID,
+		"fetcher title", source.Title,
 		"subscriber count", len(subs),
 		"new contents", len(contents),
 	)
@@ -162,7 +163,7 @@ func BroadcastNews(source *model.Source, subs []model.Subscribe, contents []mode
 	}
 }
 
-// BroadcastSourceError send feed updata error message to subscribers
+// BroadcastSourceError send fetcher updata error message to subscribers
 func BroadcastSourceError(source *model.Source) {
 	subs := model.GetSubscriberBySource(source)
 	var u tb.User
@@ -307,6 +308,8 @@ func GetMentionFromMessage(m *tb.Message) (mention string) {
 	return
 }
 
+var relaxUrlMatcher = regexp.MustCompile(`^(https?://.*?)($| )`)
+
 // GetURLAndMentionFromMessage get URL and mention from message
 func GetURLAndMentionFromMessage(m *tb.Message) (url string, mention string) {
 	for _, entity := range m.Entities {
@@ -322,6 +325,11 @@ func GetURLAndMentionFromMessage(m *tb.Message) (url string, mention string) {
 				url = m.Text[entity.Offset : entity.Offset+entity.Length]
 			}
 		}
+	}
+
+	var payloadMatching = relaxUrlMatcher.FindStringSubmatch(m.Payload)
+	if url == "" && len(payloadMatching) > 0 && payloadMatching[0] != "" {
+		url = payloadMatching[0]
 	}
 
 	return

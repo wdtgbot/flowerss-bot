@@ -1,10 +1,11 @@
 package bot
 
 import (
-	"github.com/reaitten/flowerss-bot/config"
-	"github.com/magiconair/properties/assert"
-	tb "gopkg.in/tucnak/telebot.v2"
 	"testing"
+
+	"github.com/magiconair/properties/assert"
+	"github.com/reaitten/flowerss-bot/internal/config"
+	tb "gopkg.in/tucnak/telebot.v2"
 )
 
 // TestGetMentionFromMessage test GetMentionFromMessage

@@ -2,9 +2,10 @@ package bot
 
 import (
 	"fmt"
-	tb "gopkg.in/tucnak/telebot.v2"
 	"strconv"
 	"strings"
+
+	tb "gopkg.in/tucnak/telebot.v2"
 )
 
 //feedSetAuth 验证订阅设置按钮点击者权限
@@ -17,7 +18,7 @@ func feedSetAuth(c *tb.Callback) bool {
 
 	data := strings.Split(c.Data, ":")
 	subscriberID, _ := strconv.Atoi(data[0])
-	// 如果订阅者与按钮点击者id不一致，需要验证管理员权限
+	// 如果订阅者与按钮点击者id不一致, 需要验证管理员权限
 	if subscriberID != c.Sender.ID {
 		channelChat, err := B.ChatByID(fmt.Sprintf("%d", subscriberID))
 

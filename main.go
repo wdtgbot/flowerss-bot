@@ -1,17 +1,21 @@
 package main
 
 import (
-	"github.com/reaitten/flowerss-bot/bot"
-	"github.com/reaitten/flowerss-bot/model"
-	"github.com/reaitten/flowerss-bot/task"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/reaitten/flowerss-bot/internal/bot"
+	"github.com/reaitten/flowerss-bot/internal/model"
+	"github.com/reaitten/flowerss-bot/internal/task"
+
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
 func main() {
 	model.InitDB()
-	go task.Update()
+	task.StartTasks()
 	go handleSignal()
 	bot.Start()
 }
@@ -22,6 +26,7 @@ func handleSignal() {
 
 	<-c
 
+	task.StopTasks()
 	model.Disconnect()
 	os.Exit(0)
 }
