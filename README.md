@@ -1,4 +1,4 @@
-# flowerss bot
+# flowerss-bot
 
 [![Build Status](https://github.com/indes/flowerss-bot/workflows/Release/badge.svg)](https://github.com/indes/flowerss-bot/actions?query=workflow%3ARelease)
 [![Test Status](https://github.com/indes/flowerss-bot/workflows/Test/badge.svg)](https://github.com/indes/flowerss-bot/actions?query=workflow%3ATest)
@@ -19,7 +19,7 @@
 
 ## Installation and use
 
-For detailed installation, please refer to the [installation process](https://orsixtyone.cf/flowerss-bot/#/).
+For detailed installation, please refer to the [installation process](https://reaitten.xyz/flowerss-bot/#/).
 
 List of available commands:
 
@@ -38,4 +38,6 @@ List of available commands:
 /unsuball cancel all subscriptions
 /help Get detailed help
 ```
-For detailed usage, please refer to the project [usage document](https://orsixtyone.cf/flowerss-bot/#/usage).
+Bot Father Commands: [commands.txt](https://github.com/reaitten/flowerss-bot/blob/main/commands.txt)
+
+For detailed usage, please refer to the project [usage document](https://reaitten.xyz/flowerss-bot/#/usage).
