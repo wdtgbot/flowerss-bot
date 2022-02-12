@@ -1,17 +1,18 @@
 package bot
 
 import (
-	"go.uber.org/zap"
 	"time"
 
-	"github.com/reaitten/flowerss-bot/bot/fsm"
-	"github.com/reaitten/flowerss-bot/config"
-	"github.com/reaitten/flowerss-bot/util"
+	"github.com/reaitten/flowerss-bot/internal/bot/fsm"
+	"github.com/reaitten/flowerss-bot/internal/config"
+	"github.com/reaitten/flowerss-bot/internal/util"
+
+	"go.uber.org/zap"
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
 var (
-	// User state，Used to indicate the status of the current user operation
+	// User state, Used to indicate the status of the current user operation
 	UserState map[int64]fsm.UserStatus = make(map[int64]fsm.UserStatus)
 
 	// B telebot
@@ -68,25 +69,25 @@ func Start() {
 func setCommands() {
 	// Set bot command prompt information
 	commands := []tb.Command{
-		{"start", "Get started"},
-		{"sub", "Subscribe to RSS feed"},
-		{"list", "RSS feeds currently subscribed"},
-		{"unsub", "Unsubscribe RSS feed"},
-		{"unsuball", "Unsubscribe from all RSS sources"},
+		{Text: "start", Description: "Get started"},
+		{Text: "sub", Description: "Subscribe to RSS feed"},
+		{Text: "list", Description: "RSS feeds currently subscribed"},
+		{Text: "unsub", Description: "Unsubscribe RSS feed"},
+		{Text: "unsuball", Description: "Unsubscribe from all RSS sources"},
 
-		{"set", "Set up RSS subscription"},
-		{"setfeedtag", "Set RSS subscription label"},
-		{"setinterval", "Set RSS subscription crawl interval"},
+		{Text: "set", Description: "Set up RSS subscription"},
+		{Text: "setfeedtag", Description: "Set RSS subscription label"},
+		{Text: "setinterval", Description: "Set RSS subscription crawl interval"},
 
-		{"export", "Export subscription as OPML file"},
-			{"import", "Import subscription from OPML file"},
+		{Text: "export", Description: "Export subscription as OPML file"},
+		{Text: "import", Description: "Import subscription from OPML file"},
 
-		{"check", "Check the status of my RSS subscription"},
-		{"pauseall", "Pause all crawling subscription updates"},
-		{"activeall", "Turn on fetching subscription updates"},
+		{Text: "check", Description: "Check the status of my RSS subscription"},
+		{Text: "pauseall", Description: "Pause all crawling subscription updates"},
+		{Text: "activeall", Description: "Turn on fetching subscription updates"},
 
-		{"help", "Get a list of available commands"},
-		{"version", "Bot Version"},
+		{Text: "help", Description: "Get a list of available commands"},
+		{Text: "version", Description: "Bot Version"},
 	}
 
 	zap.S().Debugf("set bot command %+v", commands)

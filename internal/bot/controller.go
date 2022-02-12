@@ -8,12 +8,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/reaitten/flowerss-bot/internal/bot/fsm"
+	"github.com/reaitten/flowerss-bot/internal/config"
+	"github.com/reaitten/flowerss-bot/internal/model"
+
 	"go.uber.org/zap"
-
-	"github.com/reaitten/flowerss-bot/bot/fsm"
-	"github.com/reaitten/flowerss-bot/config"
-	"github.com/reaitten/flowerss-bot/model"
-
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
@@ -208,7 +207,7 @@ func listCmdCtr(m *tb.Message) {
 
 	var rspMessage string
 	if mention != "" {
-		// channel feed list
+		// channel fetcher list
 		channelChat, err := B.ChatByID(mention)
 		if err != nil {
 			_, _ = B.Send(m.Chat, "error")
@@ -233,7 +232,7 @@ func listCmdCtr(m *tb.Message) {
 		}
 
 		sources, _ := model.GetSourcesByUserID(channelChat.ID)
-		rspMessage = fmt.Sprintf("Channel [%s](https://t.me/%s) Subscription list：\n", channelChat.Title, channelChat.Username)
+		rspMessage = fmt.Sprintf("Channel [%s](https://t.me/%s) Subscription list:\n", channelChat.Title, channelChat.Username)
 		if len(sources) == 0 {
 			rspMessage = fmt.Sprintf("Channel [%s](https://t.me/%s) subscription list is empty", channelChat.Title, channelChat.Username)
 		} else {
@@ -260,7 +259,7 @@ func listCmdCtr(m *tb.Message) {
 			return
 		}
 
-		rspMessage = "Current subscription list：\n"
+		rspMessage = "Current subscription list:\n"
 		if len(subSourceMap) == 0 {
 			rspMessage = "The subscription list is empty"
 		} else {
@@ -302,7 +301,7 @@ func checkCmdCtr(m *tb.Message) {
 		}
 
 		sources, _ := model.GetErrorSourcesByUserID(channelChat.ID)
-		message := fmt.Sprintf("Channel [%s](https://t.me/%s) List of expired subscriptions：\n", channelChat.Title, channelChat.Username)
+		message := fmt.Sprintf("Channel [%s](https://t.me/%s) List of expired subscriptions:\n", channelChat.Title, channelChat.Username)
 		if len(sources) == 0 {
 			message = fmt.Sprintf("Channel [%s](https://t.me/%s) All subscriptions are normal", channelChat.Title, channelChat.Username)
 		} else {
@@ -318,7 +317,7 @@ func checkCmdCtr(m *tb.Message) {
 
 	} else {
 		sources, _ := model.GetErrorSourcesByUserID(m.Chat.ID)
-		message := "List of expired subscriptions：\n"
+		message := "List of expired subscriptions:\n"
 		if len(sources) == 0 {
 			message = "All subscriptions are normal"
 		} else {
@@ -382,12 +381,12 @@ func setCmdCtr(m *tb.Message) {
 		// Add button
 		text := fmt.Sprintf("%s %s", source.Title, source.Link)
 		replyButton = []tb.ReplyButton{
-			tb.ReplyButton{Text: text},
+			{Text: text},
 		}
 		replyKeys = append(replyKeys, replyButton)
 
 		setFeedItemBtns = append(setFeedItemBtns, []tb.InlineButton{
-			tb.InlineButton{
+			{
 				Unique: "set_feed_item_btn",
 				Text:   fmt.Sprintf("[%d] %s", source.ID, source.Title),
 				Data:   fmt.Sprintf("%d:%d", ownerID, source.ID),
@@ -708,7 +707,7 @@ func unsubFeedItemBtnCtr(c *tb.Callback) {
 			return
 		}
 	}
-	_, _ = B.Edit(c.Message, "Unsubscribe error！")
+	_, _ = B.Edit(c.Message, "Unsubscribe error!")
 }
 
 func unsubAllCmdCtr(m *tb.Message) {
@@ -756,7 +755,7 @@ func unsubAllConfirmBtnCtr(c *tb.Callback) {
 		if err != nil {
 			msg = "Failed to unsubscribe"
 		} else {
-			msg = fmt.Sprintf("Sucessfully Unsubscribed：%d\nFailed to unsubscribe：%d", success, fail)
+			msg = fmt.Sprintf("Sucessfully Unsubscribed:%d\nFailed to unsubscribe:%d", success, fail)
 		}
 
 	} else {
@@ -773,7 +772,7 @@ func unsubAllConfirmBtnCtr(c *tb.Callback) {
 				msg = "Failed to unsubscribe"
 
 			} else {
-				msg = fmt.Sprintf("Sucessfully Unsubscribed：%d\nFailed to unsubscribe：%d", success, fail)
+				msg = fmt.Sprintf("Sucessfully Unsubscribed:%d\nFailed to unsubscribe:%d", success, fail)
 			}
 
 		} else {
@@ -794,7 +793,7 @@ func pingCmdCtr(m *tb.Message) {
 
 func helpCmdCtr(m *tb.Message) {
 	message := `
-Commands：
+Commands:
 /sub [url] Subscribe (url is optional)
 /unsub [url] Unsubscribe (url is optional)
 /list View current subscriptions
@@ -1228,7 +1227,7 @@ func docCtr(m *tb.Message) {
 		successImportList = append(successImportList, outline)
 	}
 
-	importReport := fmt.Sprintf("<b>Imported successfully：%d，Import failed：%d</b>", len(successImportList), len(failImportList))
+	importReport := fmt.Sprintf("<b>Imported successfully:%d, Import failed:%d</b>", len(successImportList), len(failImportList))
 	if len(successImportList) != 0 {
 		successReport := "\n\n<b>The following feeds were imported successfully:</b>"
 		for i, line := range successImportList {

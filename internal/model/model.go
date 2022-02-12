@@ -1,15 +1,13 @@
 package model
 
 import (
-	"github.com/reaitten/flowerss-bot/config"
-	"github.com/reaitten/flowerss-bot/log"
+	"time"
+
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql" //mysql driver
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"github.com/reaitten/flowerss-bot/internal/config"
+	"github.com/reaitten/flowerss-bot/internal/log"
 	"go.uber.org/zap"
 	"moul.io/zapgorm"
-
-	"time"
 )
 
 var db *gorm.DB

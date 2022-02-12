@@ -1,10 +1,11 @@
 package log
 
 import (
-	"github.com/reaitten/flowerss-bot/config"
+	"strings"
+
+	"github.com/reaitten/flowerss-bot/internal/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"strings"
 )
 
 var (
