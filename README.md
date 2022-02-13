@@ -6,7 +6,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/reaitten/flowerss-bot)](https://goreportcard.com/report/github.com/reaitten/flowerss-bot)
 ![GitHub](https://img.shields.io/github/license/reaitten/flowerss-bot.svg)
 
-[Installation Process](https://orsixtyone.cf/flowerss-bot/)
+[Installation Process](https://reaitten.github.io/flowerss-bot/)
 
 <img src="https://github.com/rssflow/img/raw/master/images/rssflow_demo.gif" width = "300"/>
 
@@ -19,7 +19,7 @@
 
 ## Installation and use
 
-For detailed installation, please refer to the [installation process](https://reaitten.xyz/flowerss-bot/#/).
+For detailed installation, please refer to the [installation process](https://reaitten.github.io/flowerss-bot/#/).
 
 List of available commands:
 
